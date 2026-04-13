@@ -1,0 +1,21 @@
+name: Build My Offline APK
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Build APK
+        # هذه الخطوة تحول ملف index.html لـ APK يعمل أوفلاين
+        run: |
+          echo "Building APK..."
+          # ملاحظة: ستحتاج لاستخدام أداة جاهزة أو سأعطيك رابطاً يحولها لك
+          
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: Mobile-Hacker-Tool
+          path: .
