@@ -47,6 +47,20 @@ app.post('/login', (req, res) => {
 
   res.json({ message: "تم تسجيل الدخول بنجاح!", username });
 });
+// جلب قائمة المستخدمين للإدارة
+app.get('/admin/users', (req, res) => {
+  const { adminUser } = req.query;
+  // السماح للأدمن الرئيسي أو أي يوزر مراجعة القائمة
+  if (!adminUser) return res.status(400).json({ error: "مطلوب صلاحية" });
+  
+  // إرجاع قائمة المستخدمين مع حالتهم
+  const userList = users.map(u => ({
+    username: u.username,
+    isBanned: u.isBanned || false
+  }));
+  res.json(userList);
+});
+
 
 // 3. إرسال رسالة لشخص تاني باليوزرنيم بتاعو
 app.post('/send', (req, res) => {
