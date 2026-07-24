@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة التواصل المصغرة</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #e5ddd5; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .container { width: 100%; max-width: 400px; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 90vh; }
+        h2 { text-align: center; color: #075e54; margin-top: 0; }
+        input, button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+        button { background: #25d366; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background: #128c7e; }
+        .hidden { display: none !important; }
+        #chat-box { flex: 1; border: 1px solid #ddd; background: #efeae2; border-radius: 5px; padding: 10px; overflow-y: auto; margin-bottom: 10px; display: flex; flex-direction: column; }
+        .msg { padding: 8px 12px; margin: 5px 0; border-radius: 8px; max-width: 75%; word-wrap: break-word; }
+        .my-msg { background: #dcf8c6; align-self: flex-end; }
+        .other-msg { background: #fff; align-self: flex-start; }
+        .error { color: red; font-size: 14px; text-align: center; }
+        .info { font-size: 12px; color: #555; text-align: center; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>تطبيق الشات المصغر</h2>
+
+    <!-- قسم تسجيل الدخول / إنشاء حساب -->
+    <div id="auth-section">
+        <p class="info">الحد الأقصى للمنصة 5 حسابات فقط!</p>
+        <input type="text" id="username" placeholder="اسم المستخدم (Username)">
+        <input type="password" id="password" placeholder="كلمة المرور (Password)">
+        <button onclick="register()">تسجيل حساب جديد</button>
+        <button onclick="login()" style="background: #34b7f1;">تسجيل الدخول</button>
+        <p id="auth-error" class="error"></p>
+    </div>
+
+    <!-- قسم الشات (يظهر بعد الدخول) -->
+    <div id="chat-section" class="hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+            <span id="current-user-label" style="font-weight: bold; color: #075e54;"></span>
+            <button onclick="logout()" style="width: auto; padding: 5px 10px; background: #ff4d4d; font-size: 12px;">خروج</button>
+        </div>
+        <input type="text" id="receiver" placeholder="اسم الشخص المراد مراسلته">
+        <div id="chat-box"></div>
+        <div style="display: flex; gap: 5px;">
+            <input type="text" id="message-text" placeholder="اكتب رسالة..." style="margin: 0; flex: 1;">
+            <button onclick="sendMessage()" style="width: 80px; margin: 0;">إرسال</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ⚠️ استبدل الرابط أدناه برابط سيرفرك الحقيقي في Katabump بدون شرطة مائلة في النهاية
+    const SERVER_URL = "https://mine-chat1.onrender.com";
+
+    let currentUser = "";
+    let chatInterval = null;
+
+    function showError(msg) {
+        document.getElementById('auth-error').innerText = msg;
+    }
+
+    async function register() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        if(!username || !password) return showError("الرجاء ملء الحقول!");
+
+        try {
+            const res = await fetch(`${SERVER_URL}/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await res.json();
+            if(res.ok) {
+                alert("تم التسجيل بنجاح، يمكنك تسجيل الدخول الآن");
+                showError("");
+            } else {
+                showError(data.error);
+            }
+        } catch(e) {
+            showError("فشل الاتصال بالسيرفر");
+        }
+    }
+
+    async function login() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        if(!username || !password) return showError("الرجاء ملء الحقول!");
+
+        try {
+            const res = await fetch(`${SERVER_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await res.json();
+            if(res.ok) {
+                currentUser = username;
+                document.getElementById('auth-section').classList.add('hidden');
+                document.getElementById('chat-section').classList.remove('hidden');
+                document.getElementById('current-user-label').innerText = `أهلاً: ${currentUser}`;
+                
+                // جلب الرسائل كل ثانيتين تلقائياً
+                chatInterval = setInterval(fetchMessages, 2000);
+            } else {
+                showError(data.error);
+            }
+        } catch(e) {
+            showError("فشل الاتصال بالسيرفر");
+        }
+    }
+
+    async function sendMessage() {
+        const receiver = document.getElementById('receiver').value.trim();
+        const text = document.getElementById('message-text').value.trim();
+        if(!receiver || !text) return;
+
+        try {
+            const res = await fetch(`${SERVER_URL}/send`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sender: currentUser, receiver, text })
+            });
+            if(res.ok) {
+                document.getElementById('message-text').value = "";
+                fetchMessages();
+            }
+        } catch(e) {
+            console.error("خطأ في الإرسال");
+        }
+    }
+
+    async function fetchMessages() {
+        const receiver = document.getElementById('receiver').value.trim();
+        if(!receiver) return;
+
+        try {
+            const res = await fetch(`${SERVER_URL}/messages?user1=${currentUser}&user2=${receiver}`);
+            const messages = await res.json();
+            
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML = "";
+            
+            messages.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = `msg ${msg.sender === currentUser ? 'my-msg' : 'other-msg'}`;
+                div.innerText = `${msg.sender}: ${msg.text}`;
+                chatBox.appendChild(div);
+            });
+            chatBox.scrollTop = chatBox.scrollHeight;
+        } catch(e) {
+            console.error("خطأ في جلب الرسائل");
+        }
+    }
+
+    function logout() {
+        currentUser = "";
+        clearInterval(chatInterval);
+        document.getElementById('chat-section').classList.add('hidden');
+        document.getElementById('auth-section').classList.remove('hidden');
+        document.getElementById('username').value = "";
+        document.getElementById('password').value = "";
+    }
+</script>
+
+</body>
+</html>
