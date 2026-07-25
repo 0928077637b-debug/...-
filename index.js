@@ -1,119 +1,87 @@
 const express = require('express');
-const cors = require('cors'); // إضافة حزمة كورس
+const cors = require('cors');
 const app = express();
 
-const PORT = process.env.PORT || 3000;
-
-app.use(cors()); // تفعيل كورس للسماح بالاتصال من أي موقع
 app.use(express.json());
+app.use(cors());
 
-// قواعد البيانات المؤقتة في الذاكرة (Memory)
-let users = [];        // أقصى حد 5 حسابات
-let messages = [];     // الرسائل الخاصة
+// تخزين الحسابات والرسائل
+let users = [];
+let messages = [];
 
-// 1. تسجيل حساب جديد (اليوزر وكلمة المرور فقط، بحد أقصى 5 حسابات)
+// تسجيل حساب جديد
 app.post('/register', (req, res) => {
-  const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res.status(400).json({ error: "الرجاء كتابة اليوزرنيم وكلمة المرور!" });
+  const { username, password, acceptTerms } = req.body;
+  if (!username || !password) return res.status(400).json({ error: "الرجاء ملء الحقول!" });
+  if (!acceptTerms) return res.status(400).json({ error: "يجب الموافقة على الشروط!" });
+  
+  if (users.length >= 5 && username.toLowerCase() !== 'hemo') {
+    return res.status(400).json({ error: "عذراً، الحد الأقصى 5 حسابات مسجلة فقط!" });
   }
 
-  // التحقق من عدد الحسابات (أقصى حد 5)
-  if (users.length >= 5) {
-    return res.status(400).json({ error: "عذراً، المنصة ممتلئة (الحد الأقصى 5 حسابات فقط)!" });
-  }
+  const existing = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+  if (existing) return res.status(400).json({ error: "اسم المستخدم مأخوذ مسبقاً!" });
 
-  // التأكد إن اليوزرنيم مش مكرر
-  const existingUser = users.find(u => u.username === username);
-  if (existingUser) {
-    return res.status(400).json({ error: "اسم المستخدم مأخوذ، اختر غيره!" });
-  }
-
-  const newUser = { username, password };
-  users.push(newUser);
-
-  res.status(201).json({ message: "تم إنشاء الحساب بنجاح!", user: username });
+  users.push({ username, password, isBanned: false });
+  res.json({ success: true });
 });
 
-// 2. تسجيل الدخول
+// تسجيل الدخول
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
-
-  const user = users.find(u => u.username === username && u.password === password);
-  if (!user) {
-    return res.status(400).json({ error: "خطأ في اسم المستخدم أو كلمة المرور!" });
-  }
-
-  res.json({ message: "تم تسجيل الدخول بنجاح!", username });
-});
-// جلب قائمة المستخدمين للإدارة
-app.get('/admin/users', (req, res) => {
-  const { adminUser } = req.query;
-  // السماح للأدمن الرئيسي أو أي يوزر مراجعة القائمة
-  if (!adminUser) return res.status(400).json({ error: "مطلوب صلاحية" });
+  const user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
   
-  // إرجاع قائمة المستخدمين مع حالتهم
-  const userList = users.map(u => ({
-    username: u.username,
-    isBanned: u.isBanned || false
-  }));
-  res.json(userList);
+  if (!user) return res.status(400).json({ error: "اسم المستخدم أو كلمة المرور غير صحيحة!" });
+  if (user.isBanned) return res.status(403).json({ error: "هذا الحساب محظور حالياً!" });
+
+  const isAdmin = (username.toLowerCase() === 'hemo');
+  res.json({ success: true, username: user.username, isAdmin, verified: isAdmin });
 });
 
-
-// 3. إرسال رسالة لشخص تاني باليوزرنيم بتاعو
+// إرسال رسالة
 app.post('/send', (req, res) => {
   const { sender, receiver, text } = req.body;
+  if (!sender || !receiver || !text) return res.status(400).json({ error: "بيانات ناقصة" });
 
-  if (!sender || !receiver || !text) {
-    return res.status(400).json({ error: "بيانات الرسالة غير مكتملة!" });
-  }
-
-  // التأكد إن المستقبل مسجل في المنصة
-  const receiverExists = users.some(u => u.username === receiver);
-  if (!receiverExists) {
-    return res.status(404).json({ error: "المستخدم غير موجود!" });
-  }
-
-  const newMessage = {
-    id: messages.length + 1,
-    sender,
-    receiver,
-    text,
-    timestamp: Date.now()
-  };
-
+  const newMessage = { id: messages.length + 1, sender, receiver, text };
   messages.push(newMessage);
-  res.status(201).json({ message: "تم إرسال الرسالة", data: newMessage });
+  res.json({ success: true });
 });
 
-// 4. جلب الرسائل بينك وبين شخص معين
+// جلب الرسائل بين اثنين
 app.get('/messages', (req, res) => {
   const { user1, user2 } = req.query;
-
   const chatMessages = messages.filter(m => 
     (m.sender === user1 && m.receiver === user2) || 
     (m.sender === user2 && m.receiver === user1)
   );
-
   res.json(chatMessages);
 });
 
-// 5. ميزة الحذف التلقائي: مسح الرسائل الأقدم من ساعة (كل 10 دقائق يفحص السيرفر)
-setInterval(() => {
-  const oneHourAgo = Date.now() - (60 * 60 * 1000);
-  const beforeCount = messages.length;
-  messages = messages.filter(m => m.timestamp > oneHourAgo);
-  if (messages.length < beforeCount) {
-    console.log("تم تنظيف الرسائل القديمة (أكبر من ساعة).");
+// جلب المستخدمين للإدارة
+app.get('/admin/users', (req, res) => {
+  res.json(users);
+});
+
+// حظر مستخدم
+app.post('/admin/ban-user', (req, res) => {
+  const { targetUser } = req.body;
+  const user = users.find(u => u.username === targetUser);
+  if (user) {
+    user.isBanned = !user.isBanned;
+    res.json({ success: true });
+  } else {
+    res.status(404).json({ error: "المستخدم غير موجود" });
   }
-}, 10 * 60 * 1000);
-
-app.get('/', (req, res) => {
-  res.json({ status: "running", activeUsers: users.length });
 });
 
-app.listen(PORT, () => {
-  console.log(`Chat Server is running on port ${PORT}`);
+// حذف مستخدم
+app.post('/admin/delete-user', (req, res) => {
+  const { targetUser } = req.body;
+  users = users.filter(u => u.username !== targetUser);
+  res.json({ success: true });
 });
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+                          
