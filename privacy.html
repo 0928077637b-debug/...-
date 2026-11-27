@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<meta name="description" content="سياسة الخصوصية الكاملة للعبة الدخيل — ما البيانات التي نجمعها، وكيف نستخدمها ونشاركها، ومدة الاحتفاظ بها، وحقوق اللاعبين وخصوصية الأطفال." />
+<link rel="icon" href="data:," />
+<title>سياسة الخصوصية — الدخيل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f6f5;
+    --surface:#ffffff;
+    --surface-2:#eef3f1;
+    --ink:#14201d;
+    --ink-2:#3d4f4a;
+    --muted:#6b7d78;
+    --line:#d9e2de;
+    --teal:#0b6b5e;
+    --teal-dark:#084f46;
+    --teal-soft:#e0efec;
+    --amber:#b45309;
+    --amber-soft:#fdf0dc;
+    --red:#b42318;
+    --radius:14px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1513;
+      --surface:#16201d;
+      --surface-2:#1c2a26;
+      --ink:#edf3f1;
+      --ink-2:#c3d2cd;
+      --muted:#93a8a2;
+      --line:#2a3a36;
+      --teal:#2ebfa8;
+      --teal-dark:#2ebfa8;
+      --teal-soft:#17332e;
+      --amber:#f0a840;
+      --amber-soft:#33270f;
+      color-scheme: dark;
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"IBM Plex Sans Arabic", system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+    line-height:1.9;font-size:16.5px;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--teal);text-underline-offset:3px}
+  a:focus-visible, button:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:6px}
+
+  /* ---------- Header ---------- */
+  .topbar{
+    background:var(--teal-dark);color:#fff;
+    padding:28px 20px 30px;
+  }
+  @media (prefers-color-scheme: dark){ .topbar{background:#0a3d36} }
+  .topbar-in{max-width:860px;margin:0 auto}
+  .game-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .mark{
+    width:52px;height:52px;flex:0 0 52px;border-radius:12px;
+    background:#fff;color:var(--teal-dark);
+    display:grid;place-items:center;
+    font-family:"Noto Kufi Arabic",sans-serif;font-weight:800;font-size:26px;line-height:1;
+  }
+  .game-name{font-family:"Noto Kufi Arabic",sans-serif;font-weight:800;font-size:22px;line-height:1.3}
+  .game-sub{font-size:13.5px;opacity:.85;line-height:1.5}
+  .topbar h1{
+    font-family:"Noto Kufi Arabic",sans-serif;font-weight:800;
+    font-size:clamp(28px,6vw,40px);line-height:1.35;margin:22px 0 8px;
+  }
+  .topbar .lede{margin:0;max-width:62ch;font-size:16px;opacity:.93}
+  .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .meta-chip{
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);
+    border-radius:999px;padding:6px 13px;font-size:13.5px;line-height:1.6;
+  }
+  .meta-chip b{font-weight:700}
+
+  /* ---------- Layout ---------- */
+  .wrap{max-width:860px;margin:0 auto;padding:26px 16px 64px}
+  @media (min-width:720px){ .wrap{padding:34px 24px 72px} }
+
+  .summary{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px 20px 8px;margin-bottom:22px;
+  }
+  .summary h2{font-size:18px;margin:0 0 6px;font-family:"Noto Kufi Arabic",sans-serif}
+  .summary p{margin:0 0 12px;color:var(--ink-2)}
+  .facts{display:grid;gap:10px;padding:6px 0 14px}
+  @media (min-width:640px){ .facts{grid-template-columns:1fr 1fr} }
+  .fact{
+    background:var(--surface-2);border-radius:10px;padding:12px 14px;
+    display:flex;gap:11px;align-items:flex-start;
+  }
+  .fact .ic{flex:0 0 auto;width:30px;height:30px;border-radius:8px;background:var(--teal-soft);display:grid;place-items:center;color:var(--teal)}
+  .fact .ic svg{width:18px;height:18px}
+  .fact p{margin:0;font-size:14.5px;line-height:1.75;color:var(--ink-2)}
+  .fact p b{color:var(--ink);display:block;font-size:15px}
+
+  /* TOC */
+  .toc{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px 18px;margin-bottom:26px;
+  }
+  .toc h2{font-size:15px;margin:0 0 10px;color:var(--muted);font-weight:600}
+  .toc ol{margin:0;padding:0;list-style:none;counter-reset:toc;display:grid;gap:2px}
+  @media (min-width:640px){ .toc ol{grid-template-columns:1fr 1fr} }
+  .toc a{
+    display:flex;align-items:center;gap:9px;min-height:40px;padding:6px 8px;
+    color:var(--ink);text-decoration:none;border-radius:8px;font-size:15px;
+  }
+  .toc a:hover{background:var(--surface-2)}
+  .toc a::before{
+    counter-increment:toc;content:counter(toc);
+    flex:0 0 24px;width:24px;height:24px;border-radius:50%;
+    background:var(--teal-soft);color:var(--teal);
+    display:grid;place-items:center;font-size:13px;font-weight:700;
+  }
+
+  section.policy{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px 20px;margin-bottom:16px;scroll-margin-top:16px;
+  }
+  @media (min-width:720px){ section.policy{padding:26px 28px} }
+  section.policy h2{
+    font-family:"Noto Kufi Arabic",sans-serif;font-size:20px;line-height:1.5;
+    margin:0 0 12px;display:flex;gap:11px;align-items:baseline;
+  }
+  section.policy h2 .num{
+    flex:0 0 auto;background:var(--teal);color:#fff;
+    width:30px;height:30px;border-radius:9px;display:inline-grid;place-items:center;
+    font-size:15px;font-weight:700;transform:translateY(4px);
+  }
+  section.policy h3{font-size:16.5px;margin:20px 0 6px}
+  section.policy p{margin:0 0 12px;color:var(--ink-2)}
+  section.policy p:last-child{margin-bottom:0}
+  section.policy ul{margin:0 0 12px;padding-inline-start:22px;color:var(--ink-2)}
+  section.policy li{margin-bottom:7px}
+  section.policy li::marker{color:var(--teal)}
+  section.policy strong, section.policy b{color:var(--ink)}
+
+  .callout{
+    border-radius:10px;padding:14px 16px;margin:14px 0;font-size:15px;line-height:1.85;
+  }
+  .callout p{margin:0}
+  .callout-teal{background:var(--teal-soft);color:var(--ink)}
+  .callout-teal p{color:var(--ink)}
+  .callout-amber{background:var(--amber-soft);color:var(--ink)}
+  .callout-amber p{color:var(--ink)}
+  .callout .ttl{font-weight:700;display:block;margin-bottom:2px}
+
+  /* Table -> stacked cards on mobile */
+  .tbl{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:14px 0}
+  .tbl table{width:100%;border-collapse:collapse;font-size:14.5px}
+  .tbl th{background:var(--surface-2);color:var(--ink);text-align:right;font-weight:700;padding:11px 13px;border-bottom:1px solid var(--line)}
+  .tbl td{padding:11px 13px;color:var(--ink-2);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.75}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl td:first-child{font-weight:600;color:var(--ink);white-space:nowrap}
+  @media (max-width:639px){
+    .tbl{border:none;overflow:visible}
+    .tbl table, .tbl tbody, .tbl tr, .tbl td{display:block;width:100%}
+    .tbl thead{display:none}
+    .tbl tr{border:1px solid var(--line);border-radius:10px;margin-bottom:10px;background:var(--surface);overflow:hidden}
+    .tbl td{border-bottom:1px solid var(--line)}
+    .tbl td:last-child{border-bottom:none}
+    .tbl td::before{content:attr(data-l);display:block;font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:2px}
+    .tbl td:first-child{background:var(--surface-2);font-size:15.5px}
+    .tbl td:first-child::before{display:none}
+  }
+
+  .contact-box{
+    background:var(--teal-dark);color:#fff;border-radius:var(--radius);padding:24px 22px;margin-top:22px;
+  }
+  @media (prefers-color-scheme: dark){ .contact-box{background:#0a3d36} }
+  .contact-box h2{font-family:"Noto Kufi Arabic",sans-serif;font-size:20px;margin:0 0 8px}
+  .contact-box p{margin:0 0 10px;opacity:.94}
+  .contact-box p:last-child{margin-bottom:0}
+  .contact-box b{background:rgba(255,255,255,.16);border-radius:6px;padding:1px 7px;white-space:nowrap}
+  .wa-btn{
+    display:inline-flex;align-items:center;gap:9px;min-height:48px;
+    background:#25d366;color:#07331a;font-weight:700;font-size:16px;
+    border-radius:10px;padding:10px 20px;text-decoration:none;margin:6px 0 14px;
+  }
+  .wa-btn svg{width:21px;height:21px;flex:0 0 auto}
+  .contact-box ol{margin:0 0 10px;padding-inline-start:22px}
+  .contact-box li{margin-bottom:6px}
+
+  footer{max-width:860px;margin:0 auto;padding:0 20px 40px;color:var(--muted);font-size:13.5px;line-height:1.8;text-align:center}
+  .to-top{
+    display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:8px 18px;
+    background:var(--surface);border:1px solid var(--line);border-radius:999px;
+    color:var(--ink);text-decoration:none;font-size:14.5px;font-weight:600;margin-bottom:16px;
+  }
+  @media print{
+    body{background:#fff}
+    .toc,.to-top{display:none}
+    section.policy,.summary{break-inside:avoid;border-color:#ccc}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="game-row">
+      <div class="mark" aria-hidden="true">د</div>
+      <div>
+        <div class="game-name">الدخيل</div>
+        <div class="game-sub">لعبة جماعية أونلاين — تخمين وحدس بين الأصدقاء</div>
+      </div>
+    </div>
+    <h1>سياسة الخصوصية</h1>
+    <p class="lede">توضّح هذه الصفحة، بلغة بسيطة وواضحة، ما المعلومات التي تتعامل معها لعبة «الدخيل»، ولماذا نحتاجها، ومع من تُشارك، وكم تبقى، وكيف تطلب حذفها. تنطبق هذه السياسة على اللعبة بنسختيها: الموقع والتطبيق.</p>
+    <div class="meta-row">
+      <span class="meta-chip">آخر تحديث: <b>27 نوفمبر 2026</b></span>
+      <span class="meta-chip">تاريخ السريان: <b>27 نوفمبر 2026</b></span>
+      <span class="meta-chip">اسم الحزمة: <b dir="ltr">com.ibrahim.aldakheel</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ملخص سريع -->
+  <div class="summary" aria-label="ملخص سريع">
+    <h2>الخلاصة في سطور</h2>
+    <p>«الدخيل» لعبة جماعية لا تحتاج حساباً ولا تسجيل دخول. لا نطلب منك إلا اسماً تختاره للعب، وكل ما يحدث داخل الغرفة يراه اللاعبون الموجودون معك في الغرفة نفسها فقط.</p>
+    <div class="facts">
+      <div class="fact">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg></span>
+        <p><b>بدون حسابات</b>لا إيميل، لا كلمة مرور، لا رقم هاتف يطلبه منك التطبيق للتسجيل.</p>
+      </div>
+      <div class="fact">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+        <p><b>المحادثة داخل الغرفة فقط</b>رسائلك تظهر للاعبين في غرفتك أثناء اللعب، ولا تُنشر خارجها.</p>
+      </div>
+      <div class="fact">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M5.5 5.5l13 13"/></svg></span>
+        <p><b>لا بيع ولا إعلانات تتبّعية</b>لا نبيع بياناتك، ولا نستخدم أدوات إعلانات أو تتبّع تسويقي.</p>
+      </div>
+      <div class="fact">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-3.6 8-10V5l-8-3-8 3v7c0 6.4 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <p><b>إذن واحد في التطبيق</b>التطبيق يحتاج إذن الإنترنت فقط، لأنه لعبة جماعية أونلاين.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- فهرس -->
+  <nav class="toc" aria-label="محتويات السياسة">
+    <h2>محتويات هذه السياسة</h2>
+    <ol>
+      <li><a href="#s1">من نحن</a></li>
+      <li><a href="#s2">المعلومات التي نجمعها</a></li>
+      <li><a href="#s3">معلومات لا نجمعها</a></li>
+      <li><a href="#s4">كيف نستخدم المعلومات</a></li>
+      <li><a href="#s5">مشاركة المعلومات وأطراف ثالثة</a></li>
+      <li><a href="#s6">التخزين على جهازك</a></li>
+      <li><a href="#s7">مدة الاحتفاظ والحذف</a></li>
+      <li><a href="#s8">أمان المعلومات</a></li>
+      <li><a href="#s9">خصوصية الأطفال</a></li>
+      <li><a href="#s10">حقوقك وخياراتك</a></li>
+      <li><a href="#s11">تغييرات على هذه السياسة</a></li>
+      <li><a href="#s12">التواصل معنا</a></li>
+    </ol>
+  </nav>
+
+  <section class="policy" id="s1">
+    <h2><span class="num">1</span> من نحن</h2>
+    <p>«الدخيل» لعبة ويب جماعية من تطوير مطوّر مستقل، يلعبها ثلاثة لاعبين على الأقل في غرفة واحدة: يحصل كل لاعب على كلمة أو دور، ويحاول الجميع اكتشاف «الدخيل» من خلال الأسئلة والإجابات والمحادثة داخل الغرفة.</p>
+    <p>في هذه السياسة، كلمة <strong>«نحن»</strong> تعني مطوّر اللعبة والمسؤول عنها، وكلمة <strong>«أنت»</strong> تعني أي شخص يفتح الموقع أو يستخدم التطبيق ويلعب.</p>
+  </section>
+
+  <section class="policy" id="s2">
+    <h2><span class="num">2</span> المعلومات التي نجمعها</h2>
+    <p>نجمع أقل قدر ممكن من المعلومات، وهو ما تحتاجه اللعبة الجماعية لتعمل فقط:</p>
+
+    <h3>أ) معلومات تكتبها أنت أثناء اللعب</h3>
+    <ul>
+      <li><strong>اسم اللاعب:</strong> الاسم الذي تكتبه قبل دخول الغرفة. يمكنك استخدام اسم مستعار، ولا نطلب اسمك الحقيقي.</li>
+      <li><strong>رسائل المحادثة:</strong> ما تكتبه في محادثة الغرفة أثناء الجولة، وتظهر للاعبين الموجودين معك في الغرفة نفسها.</li>
+      <li><strong>بيانات اللعب داخل الغرفة:</strong> مثل انضمامك للغرفة، ودورك في الجولة، وإجاباتك وتصويتك، وحالة اتصالك — وهي لازمة لتشغيل الجولة ومزامنتها بين اللاعبين.</li>
+    </ul>
+
+    <h3>ب) معلومات تقنية تصل تلقائياً</h3>
+    <p>عند اتصال جهازك بخادم اللعبة أو بموقعها، تصل معلومات تقنية قياسية ترسلها كل الأجهزة والمتصفحات عند فتح أي موقع، وتشمل:</p>
+    <ul>
+      <li><strong>عنوان IP</strong> الخاص باتصالك، وهو ضروري تقنياً لإرسال بيانات اللعبة إلى جهازك والرد عليها.</li>
+      <li><strong>معلومات الجهاز والمتصفح:</strong> مثل نوع نظام التشغيل والمتصفح وإصداره، وتُستخدم لتشخيص الأعطال وضمان عمل اللعبة على مختلف الأجهزة.</li>
+      <li><strong>سجلات الخادم الأساسية:</strong> مثل وقت الاتصال والطلبات التي وصلت الخادم، وتُستخدم للأمان وتشخيص المشاكل التقنية.</li>
+    </ul>
+    <p>لا نستخدم هذه المعلومات التقنية لتحديد هويتك الشخصية أو لبناء ملف تسويقي عنك.</p>
+
+    <div class="tbl" role="region" aria-label="جدول البيانات والغرض والاحتفاظ">
+      <table>
+        <thead>
+          <tr><th scope="col">نوع البيانات</th><th scope="col">الغرض منها</th><th scope="col">مدة بقائها</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>اسم اللاعب</td>
+            <td data-l="الغرض">تمييزك داخل الغرفة وعرض اسمك على بقية اللاعبين</td>
+            <td data-l="مدة البقاء">أثناء وجودك في الغرفة، وينتهي بخروجك وإغلاق الغرفة</td>
+          </tr>
+          <tr>
+            <td>رسائل المحادثة وبيانات الجولة</td>
+            <td data-l="الغرض">تشغيل اللعب الجماعي وعرض المحادثة على لاعبي الغرفة</td>
+            <td data-l="مدة البقاء">أثناء الجولة والغرفة فقط، ولا تُحفظ كأرشيف بعد انتهائها</td>
+          </tr>
+          <tr>
+            <td>عنوان IP وبيانات الجهاز</td>
+            <td data-l="الغرض">الاتصال بالخادم، والأمان، وتشخيص الأعطال</td>
+            <td data-l="مدة البقاء">لا نحتفظ بها بأنفسنا؛ مدة بقائها يحدّدها مزوّد الاستضافة Render وفق سياسته، ثم تُحذف أو تُجهَّل</td>
+          </tr>
+          <tr>
+            <td>إعدادات الصوت والموسيقى والاسم المحفوظ</td>
+            <td data-l="الغرض">تذكّر تفضيلاتك على جهازك بين الجلسات</td>
+            <td data-l="مدة البقاء">على جهازك فقط، حتى تمسح بيانات المتصفح أو تحذف التطبيق</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="policy" id="s3">
+    <h2><span class="num">3</span> معلومات لا نجمعها</h2>
+    <p>للعلم والاطمئنان، اللعبة <strong>لا</strong> تجمع ولا تطلب أياً مما يلي:</p>
+    <ul>
+      <li>حسابات تسجيل دخول، أو كلمات مرور، أو بريداً إلكترونياً أو رقم هاتف لغرض التسجيل.</li>
+      <li>موقعك الجغرافي الدقيق أو تتبّع تحركاتك.</li>
+      <li>جهات الاتصال، أو الصور والملفات، أو الكاميرا والميكروفون — التطبيق لا يطلب أي إذن من هذا النوع.</li>
+      <li>بيانات دفع أو بطاقات بنكية — اللعبة مجانية ولا توجد عمليات شراء داخلها.</li>
+      <li>معرّفات إعلانية، ولا نضمّن أدوات تحليلات أو إعلانات من أطراف ثالثة داخل اللعبة.</li>
+    </ul>
+  </section>
+
+  <section class="policy" id="s4">
+    <h2><span class="num">4</span> كيف نستخدم المعلومات</h2>
+    <p>نستخدم المعلومات المذكورة أعلاه للأغراض التالية فقط:</p>
+    <ul>
+      <li>تشغيل اللعبة: إنشاء الغرف، وضمّ اللاعبين، وتوزيع الأدوار والكلمات، ومزامنة المحادثة والتصويت بين اللاعبين في الوقت الحقيقي.</li>
+      <li>عرض اسمك ورسائلك على اللاعبين الموجودين معك في الغرفة نفسها، لأن هذا جزء أساسي من طريقة اللعب.</li>
+      <li>الحفاظ على أمان الخدمة واستقرارها، ومنع إساءة الاستخدام، وتشخيص الأعطال التقنية وإصلاحها.</li>
+      <li>تذكّر إعداداتك على جهازك، مثل تشغيل الموسيقى والصوت والاسم الذي اخترته.</li>
+    </ul>
+    <p>لا نستخدم معلوماتك في الإعلانات، ولا في التسويق، ولا في اتخاذ قرارات آلية تخصّك خارج سياق اللعبة.</p>
+  </section>
+
+  <section class="policy" id="s5">
+    <h2><span class="num">5</span> مشاركة المعلومات وأطراف ثالثة</h2>
+    <p><strong>لا نبيع معلوماتك ولا نؤجّرها لأي طرف.</strong> وتُشارك المعلومات في حدود ضيقة هي:</p>
+    <h3>أ) مع لاعبين آخرين</h3>
+    <p>اسم اللاعب الذي تختاره، ورسائلك، وإجاباتك وتصويتك داخل الغرفة، كلها مرئية بطبيعتها للاعبين الموجودين معك في الغرفة نفسها وأثناء اللعب. لذلك تجنّب كتابة معلومات شخصية حساسة — مثل عنوانك أو رقم هاتفك — في اسم اللاعب أو في المحادثة.</p>
+    <h3>ب) مع مزوّدي الاستضافة والتشغيل</h3>
+    <ul>
+      <li><strong>GitHub Pages:</strong> تستضيف ملفات موقع اللعبة، وقد تعالج معلومات تقنية قياسية (مثل عنوان IP) عند فتح الموقع، وفق سياسة خصوصية GitHub.</li>
+      <li><strong>Render:</strong> يستضيف خادم اللعبة الذي يدير الغرف والاتصال بين اللاعبين، وقد يعالج المعلومات التقنية وسجلات الاتصال اللازمة للتشغيل، وفق سياسة خصوصية Render.</li>
+    </ul>
+    <p>هؤلاء المزوّدون يعالجون البيانات لغرض تشغيل الخدمة فقط، ولا نشارك مع أي طرف ثالث آخر معلوماتك لأغراضه الخاصة.</p>
+    <h3>ج) عند طلب قانوني</h3>
+    <p>قد نضطر للكشف عن معلومات محدودة إذا طلبت جهة مختصة ذلك بموجب قانون واجب التطبيق، وفي أضيق حدود يفرضها ذلك الطلب.</p>
+    <h3>د) رابط التواصل الخارجي</h3>
+    <p>تحتوي اللعبة على رابط تواصل عبر واتساب للدعم والملاحظات. إذا ضغطته فستنتقل إلى تطبيق واتساب أو موقعه، وتسري عليه سياسة خصوصية واتساب، وأي معلومات ترسلها هناك تكون بينك وبيننا عبر ذلك التطبيق.</p>
+    <div class="callout callout-amber">
+      <p><span class="ttl">تنبيه عن المحادثة</span>المحادثة داخل الغرفة ليست خاصة بينك وبين الخادم فقط؛ هي محادثة جماعية يراها كل من في الغرفة. تعامل معها كما تتعامل مع أي محادثة جماعية بين أصدقائك.</p>
+    </div>
+  </section>
+
+  <section class="policy" id="s6">
+    <h2><span class="num">6</span> التخزين على جهازك</h2>
+    <p>تحفظ اللعبة على جهازك — داخل المتصفح أو داخل التطبيق — إعدادات بسيطة مثل: حالة تشغيل الموسيقى والمؤثرات الصوتية، واسم اللاعب الذي استخدمته آخر مرة، حتى لا تعيد ضبطها كل مرة.</p>
+    <p>هذه البيانات تبقى على جهازك ولا تُرسل إلينا كقاعدة بيانات منفصلة، ويمكنك حذفها في أي وقت بمسح بيانات المتصفح أو بيانات التطبيق، أو بحذف التطبيق نفسه. لا نستخدم ملفات تعريف ارتباط (كوكيز) إعلانية أو تتبّعية.</p>
+  </section>
+
+  <section class="policy" id="s7">
+    <h2><span class="num">7</span> مدة الاحتفاظ بالبيانات وحذفها</h2>
+    <ul>
+      <li><strong>بيانات الغرفة والجولة:</strong> مؤقتة بطبيعتها؛ ترتبط بوجود الغرفة واللاعبين فيها، وتنتهي بانتهاء الجولة وخروج اللاعبين وإغلاق الغرفة، ولا نحتفظ بأرشيف دائم لمحادثات الغرف.</li>
+      <li><strong>السجلات التقنية:</strong> نحن لا نحتفظ بنسخة خاصة بنا من سجلات الخادم ولا نحدّد مدة بقائها؛ أي سجلات اتصال أساسية يحتفظ بها مزوّد الاستضافة <strong>Render</strong> (وموقع الملفات لدى <strong>GitHub Pages</strong>) تبقى للمدة التي يحدّدها المزوّد نفسه في سياسته لأغراض التشغيل والأمان وتشخيص الأعطال، ثم يحذفها أو يجهّلها. أما بيانات الغرف والمحادثات فلا تُخزّن أصلاً بعد إغلاق الغرفة، كما هو موضّح أعلاه.</li>
+      <li><strong>البيانات على جهازك:</strong> تبقى حتى تمسحها بنفسك كما هو موضّح في القسم السابق.</li>
+    </ul>
+    <p>إذا راسلتنا بطلب حذف متعلق بمعلومات تخصّك، سنراجع الطلب ونحذف ما يمكن حذفه مما هو تحت سيطرتنا، ونرد عليك بما تم. طريقة إرسال الطلب موضّحة في قسم «التواصل معنا» أدناه.</p>
+  </section>
+
+  <section class="policy" id="s8">
+    <h2><span class="num">8</span> أمان المعلومات</h2>
+    <p>يتم الاتصال بين جهازك وخادم اللعبة عبر اتصال مشفّر (HTTPS / اتصال آمن) حيثما يدعم مزوّد الاستضافة ذلك، ونقتصر على جمع الحد الأدنى من البيانات أصلاً، وهو أقوى حماية عملية: ما لا نجمعه لا يمكن أن يتسرّب.</p>
+    <p>مع ذلك، لا توجد وسيلة نقل أو تخزين عبر الإنترنت آمنة بنسبة 100%، لذلك لا يمكننا ضمان أمان مطلق، وننصحك بعدم مشاركة أي معلومات حساسة داخل اللعبة.</p>
+  </section>
+
+  <section class="policy" id="s9">
+    <h2><span class="num">9</span> خصوصية الأطفال</h2>
+    <p>«الدخيل» لعبة اجتماعية جماعية تعتمد على المحادثة النصية مع لاعبين آخرين، وهي <strong>غير موجّهة للأطفال دون سن 13 عاماً</strong>، ولا نجمع عمداً معلومات شخصية من أطفال في هذا السن.</p>
+    <ul>
+      <li>المحادثة داخل الغرفة تتم مع لاعبين آخرين قد لا تعرفهم، لذلك ننصح بأن يلعب القاصرون بإشراف ولي الأمر ومع أشخاص يعرفونهم.</li>
+      <li>ننصح ولي الأمر بتعليم أبنائه عدم كتابة أي معلومات شخصية — مثل الاسم الكامل أو المدرسة أو العنوان أو رقم الهاتف — في اسم اللاعب أو المحادثة.</li>
+      <li>إذا كنت ولي أمر وتبيّن لك أن طفلك قدّم لنا معلومات شخصية، راسلنا عبر وسيلة التواصل أدناه وسنتخذ الخطوات المناسبة لحذفها مما هو تحت سيطرتنا.</li>
+    </ul>
+  </section>
+
+  <section class="policy" id="s10">
+    <h2><span class="num">10</span> حقوقك وخياراتك</h2>
+    <p>حتى بدون حسابات، لديك خيارات واضحة:</p>
+    <ul>
+      <li><strong>اختيار اسم مستعار:</strong> لست ملزماً باستخدام اسمك الحقيقي في اللعبة إطلاقاً.</li>
+      <li><strong>المغادرة في أي وقت:</strong> خروجك من الغرفة ينهي مشاركة اسمك ورسائلك مع لاعبيها.</li>
+      <li><strong>مسح بيانات جهازك:</strong> يمكنك حذف الإعدادات والاسم المحفوظ بمسح بيانات المتصفح أو التطبيق.</li>
+      <li><strong>طلب الحذف أو الاستفسار:</strong> يمكنك مراسلتنا لطلب حذف معلومات تخصّك أو للاستفسار عن كيفية التعامل معها، وسنرد في مدة معقولة.</li>
+    </ul>
+  </section>
+
+  <section class="policy" id="s11">
+    <h2><span class="num">11</span> تغييرات على هذه السياسة</h2>
+    <p>قد نحدّث هذه السياسة إذا تغيّرت طريقة عمل اللعبة أو المتطلبات القانونية أو متطلبات متاجر التطبيقات. عند أي تغيير جوهري — مثل جمع نوع جديد من البيانات — سنحدّث هذه الصفحة ونغيّر تاريخ «آخر تحديث» في أعلاها، وسيكون استمرارك في استخدام اللعبة بعد التحديث قبولاً للنسخة الجديدة.</p>
+    <p>ننصحك بمراجعة هذه الصفحة من حين لآخر، وهي متاحة دائماً من داخل اللعبة ومن صفحة التطبيق في المتجر.</p>
+  </section>
+
+  <div class="contact-box" id="s12">
+    <h2>12) التواصل معنا وطلب الحذف</h2>
+    <p>لأي سؤال عن الخصوصية، أو طلب حذف، أو ملاحظة عن هذه السياسة، تواصل مع مطوّر اللعبة مباشرة عبر واتساب — وهو نفس رقم الدعم الموجود داخل اللعبة:</p>
+    <a class="wa-btn" href="https://wa.me/249928077637" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.9-4.45 9.9-9.91C21.95 6.45 17.5 2 12.04 2zm0 18.13a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.54-3.7 8.22-8.24 8.22zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.14.16-.29.18-.54.06-.25-.13-1.05-.39-2-1.23-.73-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.13.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.6.19 1.13.16 1.56.1.48-.07 1.47-.6 1.81-1.18.35-.58.35-1.07.25-1.18-.1-.1-.23-.16-.48-.28z"/></svg>
+      مراسلة الدعم على واتساب
+    </a>
+    <p><strong>لطلب حذف بياناتك، اتبع الخطوات التالية:</strong></p>
+    <ol>
+      <li>افتح المحادثة من الزر أعلاه.</li>
+      <li>اكتب في رسالتك: «طلب حذف — سياسة الخصوصية — لعبة الدخيل».</li>
+      <li>اذكر اسم اللاعب الذي استخدمته وتوقيت اللعب التقريبي إن وُجد، حتى نتمكن من مساعدتك.</li>
+    </ol>
+    <p>سنراجع طلبك ونحذف ما يمكن حذفه مما هو تحت سيطرتنا ونرد عليك بما تم. لا ترسل كلمات مرور أو بيانات بنكية أبداً — اللعبة لا تطلبها أصلاً.</p>
+  </div>
+
+</div>
+
+<footer>
+  <a class="to-top" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ العودة إلى الأعلى</a>
+  <div>سياسة الخصوصية للعبة «الدخيل» — <span dir="ltr">Privacy Policy — Al-Dakheel Game</span><br>آخر تحديث: 27 نوفمبر 2026 · اسم الحزمة: <span dir="ltr">com.ibrahim.aldakheel</span></div>
+</footer>
+
+</body>
+</html>

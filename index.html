@@ -181,10 +181,10 @@
             if (!AC) return false;
             ctx = new AC();
             musicGain = ctx.createGain();
-            musicGain.gain.value = musicOn ? 0.5 : 0;
+            musicGain.gain.value = musicOn ? 0.8 : 0;
             musicGain.connect(ctx.destination);
             sfxGain = ctx.createGain();
-            sfxGain.gain.value = 0.8;
+            sfxGain.gain.value = 1.0;
             sfxGain.connect(ctx.destination);
             return true;
         }
@@ -207,13 +207,13 @@
 
         // المؤثرات الصوتية
         const sfx = {
-            click:   (t) => tone(700, t, 0.07, { type: 'triangle', vol: 0.18, slideTo: 500 }),
-            join:    (t) => { tone(523, t, 0.12, { vol: 0.18 }); tone(784, t + 0.1, 0.2, { vol: 0.18 }); },
-            message: (t) => tone(1100, t, 0.08, { vol: 0.1 }),
-            error:   (t) => { tone(220, t, 0.18, { type: 'square', vol: 0.1 }); tone(165, t + 0.15, 0.25, { type: 'square', vol: 0.1 }); },
-            start:   (t) => [392, 494, 587, 784].forEach((f, i) => tone(f, t + i * 0.09, 0.25, { type: 'triangle', vol: 0.2 })),
-            win:     (t) => [523, 659, 784, 1047].forEach((f, i) => tone(f, t + i * 0.12, 0.35, { type: 'triangle', vol: 0.22 })),
-            lose:    (t) => [392, 330, 262, 196].forEach((f, i) => tone(f, t + i * 0.16, 0.35, { type: 'sawtooth', vol: 0.08 }))
+            click:   (t) => { tone(1250, t, 0.06, { type: 'triangle', vol: 0.42, slideTo: 850 }); tone(320, t, 0.05, { type: 'sine', vol: 0.28 }); },
+            join:    (t) => { tone(523, t, 0.12, { vol: 0.28 }); tone(784, t + 0.1, 0.2, { vol: 0.28 }); },
+            message: (t) => tone(1100, t, 0.08, { vol: 0.18 }),
+            error:   (t) => { tone(220, t, 0.18, { type: 'square', vol: 0.16 }); tone(165, t + 0.15, 0.25, { type: 'square', vol: 0.16 }); },
+            start:   (t) => [392, 494, 587, 784].forEach((f, i) => tone(f, t + i * 0.09, 0.25, { type: 'triangle', vol: 0.28 })),
+            win:     (t) => [523, 659, 784, 1047].forEach((f, i) => tone(f, t + i * 0.12, 0.35, { type: 'triangle', vol: 0.3 })),
+            lose:    (t) => [392, 330, 262, 196].forEach((f, i) => tone(f, t + i * 0.16, 0.35, { type: 'sawtooth', vol: 0.14 }))
         };
 
         function play(name) {
@@ -222,22 +222,56 @@
             sfx[name](ctx.currentTime);
         }
 
-        // الموسيقى الخلفية: أربعة أوتار هادئة مع عزف متقطع، تتكرر بلا توقف
-        const EIGHTH = 60 / 84 / 2;
+        // الموسيقى الخلفية: أغنية/لحن واضح من 4 موازير يتكرر بسلاسة بلا توقف
+        // المقام: لا مينور، والتدرج Am – F – C – G. الإيقاع 112 نبضة/دقيقة،
+        // والخطوة = نوتة ثُمنية (8 خطوات لكل مازورة، 32 خطوة للدورة الكاملة ≈ 8.6 ثوانٍ).
+        // في اللحن، الرقم 0 يعني إطالة النوتة السابقة (لا هجوم جديد)، فتتشكل عبارات
+        // موسيقية واضحة بدلاً من نوتات متقطعة متساوية.
+        const BPM = 112;
+        const EIGHTH = 60 / BPM / 2;
         const CHORDS = [[57, 60, 64], [53, 57, 60], [48, 52, 55], [55, 59, 62]];
         const BASS = [45, 41, 36, 43];
-        const PATTERN = [0, 1, 2, 1, 0, 1, 2, 1];
+        // اللحن الرئيسي (32 خطوة، أرقام MIDI): ينتهي على نوتة لا (69) فيعود للبداية بسلاسة
+        const MELODY = [
+            69, 0, 72, 76, 81, 0, 79, 76,   // مازورة 1 (Am): لا – دو – مي – لا – صول – مي
+            77, 0, 76, 72, 69, 0, 72, 74,   // مازورة 2 (F):  فا – مي – دو – لا – دو – ري
+            72, 0, 76, 79, 76, 0, 74, 72,   // مازورة 3 (C):  دو – مي – صول – مي – ري – دو
+            74, 0, 79, 76, 74, 72, 71, 69    // مازورة 4 (G):  ري – صول – مي – ري – دو – سي – لا
+        ];
+
+        // طول النوتة (بعدد الخطوات) مع احتساب الإطالات (الأصفار) التي تليها
+        function melodyLen(pos) {
+            let len = 1;
+            for (let i = pos + 1; i < MELODY.length && MELODY[i] === 0; i++) len++;
+            return len;
+        }
 
         function scheduleMusic() {
             while (nextTime < ctx.currentTime + 0.4) {
                 const bar = Math.floor(step / 8) % CHORDS.length;
                 const pos = step % 8;
                 const chord = CHORDS[bar];
+                const mPos = step % MELODY.length;
+                // وسادة الأوتار + الباس في بداية كل مازورة
                 if (pos === 0) {
-                    tone(midi(BASS[bar]), nextTime, EIGHTH * 7, { vol: 0.12, dest: musicGain });
-                    chord.forEach(n => tone(midi(n), nextTime, EIGHTH * 8, { vol: 0.04, dest: musicGain }));
+                    chord.forEach(n => tone(midi(n), nextTime, EIGHTH * 8, { vol: 0.05, dest: musicGain }));
+                    tone(midi(BASS[bar]), nextTime, EIGHTH * 3.5, { vol: 0.22, dest: musicGain });
                 }
-                tone(midi(chord[PATTERN[pos]] + 12), nextTime, EIGHTH * 1.6, { type: 'triangle', vol: 0.07, dest: musicGain });
+                // الباس مرة ثانية في منتصف المازورة
+                if (pos === 4) {
+                    tone(midi(BASS[bar]), nextTime, EIGHTH * 2, { vol: 0.18, dest: musicGain });
+                }
+                // الإيقاع: ضربة Kick على كل ربع نوتة، و Hat على النوتات الفردية
+                if (pos % 2 === 0) {
+                    tone(150, nextTime, 0.14, { type: 'sine', vol: 0.4, dest: musicGain, slideTo: 45 });
+                } else {
+                    tone(6500, nextTime, 0.03, { type: 'triangle', vol: 0.05, dest: musicGain });
+                }
+                // اللحن الرئيسي الواضح (مثلث، أعلى بكثير من السابق)
+                const m = MELODY[mPos];
+                if (m !== 0) {
+                    tone(midi(m), nextTime, EIGHTH * melodyLen(mPos) * 0.95, { type: 'triangle', vol: 0.2, dest: musicGain });
+                }
                 nextTime += EIGHTH;
                 step++;
             }
@@ -265,7 +299,7 @@
             musicOn = on;
             try { localStorage.setItem('musicOn', on ? '1' : '0'); } catch (e) {}
             if (!init()) return;
-            if (on) { musicGain.gain.value = 0.5; startMusic(); }
+            if (on) { musicGain.gain.value = 0.8; startMusic(); }
             else { stopMusic(); musicGain.gain.value = 0; }
         }
 
@@ -291,9 +325,10 @@
     ['pointerdown', 'pointerup', 'keydown'].forEach(ev =>
         document.addEventListener(ev, () => Sound.unlock()));
 
-    // صوت نقر لكل الأزرار
+    // صوت نقر لكل العناصر التفاعلية: الأزرار، الروابط، مربعات الاختيار والتسميات
+    // (الأزرار المُنشأة ديناميكياً مثل أزرار التصويت والانضمام مشمولة لأن الاستماع على document)
     document.addEventListener('click', (e) => {
-        if (e.target.closest('button')) Sound.play('click');
+        if (e.target.closest('button, a, input[type="checkbox"], label')) Sound.play('click');
     });
 
     $('soundToggle').checked = Sound.sfxOn;
